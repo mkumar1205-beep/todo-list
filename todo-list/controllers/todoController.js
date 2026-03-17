@@ -2,7 +2,7 @@ const Todo = require('../models/Todo')
 
 const getAllTodos = async (req, res) => {
   try{
-    const todos = (await Todo.find()).sort({createdAt: -1})
+    const todos = await Todo.find()
 
     res.status(200).json({
       success: true,
@@ -47,13 +47,6 @@ const getTodo = async (req, res) => {
 const createTodo = async (req , res) => {
   try {
     const {title, priority} = req.body
-
-    if(!title) {
-      return res.status(400).json({
-        success: false,
-        message: 'Title is required'
-      })
-    }
 
     const todo = await Todo.create({
       title,
