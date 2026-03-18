@@ -2,7 +2,32 @@ const Todo = require('../models/Todo')
 
 const getAllTodos = async (req, res) => {
   try{
-    const todos = await Todo.find()
+
+    const {completed, priority} = req.query
+
+    const validPriority=['low', 'medium', 'high']
+
+    if(priority && !validPriority.includes(priority))
+    {
+      return res.status(400).json({
+        success : false,
+        message : 'Priority must be low, medium or high'
+      })
+    }
+
+    const filter={}
+
+    if(completed !== undefined)
+    {
+      filter.completed = completed === 'true' //Converting 'true' to bool true as req.query returns string
+    }
+
+    if(priority !== undefined)
+    {
+      filter.priority=priority
+    }
+
+    const todos = await Todo.find(filter)
 
     res.status(200).json({
       success: true,
