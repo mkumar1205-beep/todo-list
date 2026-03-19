@@ -12,6 +12,10 @@ const {
 
 const validateTodo = require('../middleware/validate')
 
+const protect = require('../middleware/protect')
+
+router.use(protect)
+
 router.route('/')
  .get(getAllTodos)
  .post(validateTodo, createTodo) //First validate,then create

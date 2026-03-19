@@ -2,7 +2,6 @@ const Todo = require('../models/Todo')
 
 const getAllTodos = async (req, res) => {
   try{
-
     const {completed, priority} = req.query
 
     const validPriority=['low', 'medium', 'high']
@@ -15,7 +14,7 @@ const getAllTodos = async (req, res) => {
       })
     }
 
-    const filter={}
+    const filter={user: req.user._id}
 
     if(completed !== undefined)
     {
@@ -45,7 +44,10 @@ const getAllTodos = async (req, res) => {
 
 const getTodo = async (req, res) => {
   try{
-    const todo = await Todo.findById(req.params.id)
+    const todo = await Todo.findOne({
+      _id: req.params.id,
+      user: req.user._id
+    })
 
     if(!todo) { 
       return res.status(404).json({
@@ -75,7 +77,8 @@ const createTodo = async (req , res) => {
 
     const todo = await Todo.create({
       title,
-      priority
+      priority,
+      user: req.user._id
     })
 
     res.status(201).json({
@@ -95,15 +98,15 @@ const createTodo = async (req , res) => {
 
 const updateTodo = async (req , res) => {
   try {
-    const todo = await Todo.findByIdAndUpdate(
-      req.params.id,
+    const todo = await Todo.findOneAndUpdate(
+      {_id: req.params.id, user: req.user._id},
       req.body,
       {
         new : true, runValidators: true
       }
     )
 
-    if(!true) {
+    if(!todo) {
       return res.status(404).json({
         success: false,
         message: 'Todo not found'
@@ -127,7 +130,10 @@ const updateTodo = async (req , res) => {
 
 const deleteTodo = async (req, res) => {
   try {
-    const todo = await Todo.findByIdAndDelete(req.params.id)
+    const todo = await Todo.findOneAndDelete(
+      {_id: req.params.id,
+        user: req.user._id
+      })
 
     if(!todo) {
       return res.status(404).json({
