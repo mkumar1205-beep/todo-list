@@ -10,7 +10,7 @@ const {
   deleteTodo
 } = require('../controllers/todoController')
 
-const validateTodo = require('../middleware/validate')
+const {validateCreate, validateUpdate} = require('../middleware/validate')
 
 const protect = require('../middleware/protect')
 
@@ -18,11 +18,11 @@ router.use(protect)
 
 router.route('/')
  .get(getAllTodos)
- .post(validateTodo, createTodo) //First validate,then create
+ .post(validateCreate, createTodo) //First validate,then create
 
 router.route('/:id')
  .get(getTodo) 
- .put(validateTodo, updateTodo)
+ .put(updateTodo)
  .delete(deleteTodo)
 
 module.exports = router
