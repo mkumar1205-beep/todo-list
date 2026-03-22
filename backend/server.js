@@ -7,7 +7,8 @@ const authRoutes=require('./routes/auth')
 const app=express()
 
 app.use(cors({
-  origin: 'http://localhost:5173'
+  origin: ['http://localhost:5173',
+           'https://todo-list-frontend.vercel.app']
 }))
 
 app.use(express.json())
