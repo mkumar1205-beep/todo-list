@@ -7,8 +7,10 @@ const authRoutes=require('./routes/auth')
 const app=express()
 
 app.use(cors({
-  origin: ['http://localhost:5173',
-           'https://todo-list-frontend.vercel.app']
+  origin: [
+    'http://localhost:5173',
+    'https://tod-list-frontend.netlify.app'  // ← your real Netlify URL
+  ]
 }))
 
 app.use(express.json())
